@@ -1,0 +1,78 @@
+<br/>
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User:</strong>
+  <%= @post.user.id %>
+</p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @post.title %>
+</p>
+
+
+<br/>
+<br/>
+
+
+<% unless @post.photos.blank? %>
+  <% @post.photos.each  do | photo | %>
+    <%= image_tag(File.join(root_url, photo.id.to_s, "photo", "pic", photo.id.to_s,"pic","serve_image")) %>
+    <br/>
+  <% end %>
+<% end %>
+
+<p>
+  <strong>Price:</strong>
+  <%= number_to_currency(@post.price) %>
+</p>
+
+<p>
+  <strong>Content:</strong>
+  <%= @post.content %>
+</p>
+<%= link_to 'Edit', edit_post_path(@post) %> |
+<%= link_to 'Back', posts_path %>
+<hr/>
+
+Comments
+<br/>
+<%= form_for(@comment) do |f| %>
+  <%= f.label :content %>
+  <br/>
+  <%= f.text_area :content %>
+  <%= f.hidden_field :post_id, value: @post.id %>
+  <%= f.submit "submit" %>
+<% end %>
+
+<hr/>
+<br/>
+
+<% @comments.each do | comment | %>
+<br/>
+Comment by:
+<%= comment.user.first_name %>
+<br/>
+Content:
+<br/>
+<%= comment.content %>
+
+<div id="<%= comment.id %>" style="display:none;" >
+<%= form_for(comment) do |f| %>
+  <%= f.label :content %>
+  <%= f.text_area :content %>
+  <%= f.hidden_field :post_id, value: @post.id %>
+  <%= f.submit "submit" %>
+<% end %>
+</div>
+<% if can? :edit, :comment %>
+<br/>
+<button id="<%= 'edit_' + comment.id.to_s %>"  onclick=show("<%= comment.id %>") class="show">Edit</button>
+<%= button_to 'Delete', comment_path(comment), data: {confirm: 'Are you sure?'}, method: :delete, form: {style: 'display:inline-block;'} %>
+<% end %>
+<hr/>
+<% end %>
+
+<br/>
+<hr/>

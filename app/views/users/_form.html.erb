@@ -1,0 +1,70 @@
+  <%= form_for @user,url: @direction, html: { multipart: true } do |f| %>
+  <% if @user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+      <ul>
+      <% @user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :avatar %><br>
+    <%= f.file_field :avatar %>
+  </div>
+  <div class="field">
+    <%= f.label :password %><br>
+    <%= f.password_field :password %>
+  </div>
+
+  <div class="field">
+    <%= f.label :password_confirmation %><br>
+    <%= f.password_field :password_confirmation %>
+  </div>
+
+  <div class="field">
+    <%= f.label :first_name %><br>
+    <%= f.text_field :first_name %>
+  </div>
+  <div class="field">
+    <%= f.label :last_name %><br>
+    <%= f.text_field :last_name %>
+  </div>
+  <div class="field">
+    <%= f.label :city %><br>
+    <%= f.text_field :city %>
+  </div>
+  <div class="field">
+    <%= f.label :province %><br>
+    <%= f.text_field :province %>
+  </div>
+  <div class="field">
+    <%= f.label :email %><br>
+    <%= f.text_field :email,type: "email" %>
+  </div>
+
+  <% if can? :create, Role.new %>
+    <div class="field">
+      <%= f.label :roles %><br />
+      <% for role in Role.all %>
+        <%= check_box_tag "user[role_ids][]", role.id, @user.roles.include?(role) %>
+        <%=h role.name %><br />
+      <% end %>
+    </div>
+  <% else %>
+    <% if !current_user %>
+      <%= hidden_field_tag "user[role_ids][]", Role.where(name: Role::USER_ROLE_NAME).first.id %>
+    <% end %>
+  <% end %>
+  <div class="field">
+    <%= f.label :dob %><br />
+    <%= f.text_field :dob, type: :date %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "Submit"%>
+  </div>
+
+<% end %>

@@ -1,0 +1,48 @@
+<img src="smiley.gif" id="smiles" alt="Smiley face" height="42" width="42">
+
+
+<%= form_for(@post, html: { multipart: true }) do |f| %>
+  <% if @post.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@post.errors.count, "error") %> prohibited this post from being saved:</h2>
+      <ul>
+      <% @post.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="dropzone-previews">
+    <%= f.label :pic %><br>
+    <div class="fallback">
+    <%= f.file_field :pic, multiple: true, name: "post[photos_attributes][][pic]", :onchange => "preview(this);" %>
+    </div>
+  </div>
+
+  <div class="field">
+    <%= f.label :title %><br>
+    <%= f.text_field :title %>
+  </div>
+  <div class="field">
+
+    <%= f.collection_select(:community_ids, current_user.communities, :id, :name,{}, {style:"width: 50%; display:block;",class: 'en', multiple: true}) %>
+  </div>
+  <div class="field">
+    <%= f.label :price %><br>
+    <%= f.text_field :price, type: "number", step: "any", min: "0.01", max: "9999.99", value: number_with_precision(@post.price, precision:2)  %>
+  </div>
+  <div class="field">
+    <%= f.label :content %><br>
+    <%= f.text_field :content %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+<form action="/file-upload" class="dropzone">
+  <div class="fallback">
+    <input name="file" type="file" multiple />
+  </div>
+</form>

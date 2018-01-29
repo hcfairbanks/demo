@@ -1,0 +1,155 @@
+<p id="notice"><%= notice %></p>
+Banner<br/>
+<% unless @community.banner.blank? %>
+  <%= image_tag(File.join(root_url, @community.id.to_s, "community", "banner", @community.id.to_s,"banner","serve_image")) %>
+<% else %>
+  No Image <!-- Default  images needed-->
+<% end %>
+<br/>
+Avatar<br/>
+<% unless @community.avatar.blank? %>
+  <%= image_tag(File.join(root_url, @community.id.to_s, "community", "avatar", @community.id.to_s,"avatar","serve_image")) %>
+<% else %>
+  No Image <!-- Default  images needed-->
+<% end %>
+<br/>
+
+<p>
+  <strong>Name:</strong>
+  <%= @community.name %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @community.user_id %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @community.status_id %>
+</p>
+
+<%= form_for(Post.new, html: { multipart: true }) do |f| %>
+<!-- Errors need to be accounted for -->
+  <div class="field">
+    <%= f.label :avatar %><br>
+    <%= f.file_field :avatar %>
+  </div>
+
+
+   <div class="field">
+     <%= f.label :pic %><br>
+     <%= f.file_field :pic, multiple: true, name: "post[photos_attributes][][pic]" %>
+   </div>
+
+
+
+  <div class="field">
+    <%= f.label :title %><br>
+    <%= f.text_field :title %>
+  </div>
+  <div class="field">
+      <%= f.collection_select(:community_ids, current_user.communities, :id, :name,{selected: @community.id}, {class: 'en', style:"width: 50%; display:block;", multiple: true}) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :price %><br>
+    <%= f.text_field :price, type: "number", step: "any", min: "0.01", max: "9999.99"%>
+  </div>
+  <div class="field">
+    <%= f.label :content %><br>
+    <%= f.text_field :content %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
+
+
+
+
+<% @community.posts.each do | post | %>
+<br/>
+<br/><%= post.title %>
+<br/><%= post.id %>
+<br/>
+
+<% post.comments.each do |comment|%>
+<br/>
+<%= comment.content %>
+<br/>
+<% end %>
+
+
+<%= form_for(Comment.new) do |f| %>
+  <%= f.label :content %>
+  <%= f.text_area :content %>
+  <%= f.hidden_field :post_id, value: post.id %>
+  <%= f.submit "submit" %>
+<% end %>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<% end %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<%= link_to 'Edit', edit_community_path(@community) %> |
+<%= link_to 'Back', communities_path %>

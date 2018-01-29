@@ -1,0 +1,13 @@
+<p id="notice"><%= notice %></p>
+<%= link_to 'New Post', new_post_path %>
+<%= react_component("HelloWorld")%>
+<button onclick=test()>test</button>
+<br/>
+<div id="test"></div>
+
+<%= session[:session_id]%>
+
+
+<br/>
+
+<%= render partial: "posts", object: @posts %>

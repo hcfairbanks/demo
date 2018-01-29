@@ -1,0 +1,21 @@
+<h1>Conversations#show</h1>
+Main User ID:
+<%= current_user.id %>
+
+<div id="msg-box" style="width:200px;height:300px;overflow: scroll;overflow-x:hidden; ">
+
+
+  <div id="conversation" data-conversation-id="<%= @conversation.id %>" data-user-id="<%= current_user.id %>">
+    <% @conversation.messages.each do | message | %>
+        Message: <%= message.content %>
+        <br/>
+        User ID: <%= message.user_id %>
+        <br/>
+    <% end %>
+  </div>
+</div>
+
+<form>
+  <label>Enter Message</label><br/>
+  <input type="text" data-behavior="conversation_msg">
+</form>

@@ -1,0 +1,21 @@
+<h1>Conversations#index</h1>
+
+<p id="notice"><%= notice %></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Conversation ID</th>
+      <th>Destroy</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @conversations.each do | conversation | %>
+      <tr>
+        <td valign='top'><%= link_to conversation.id, conversation %></td>
+        <td valign='top'><%= link_to 'Destroy', conversation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

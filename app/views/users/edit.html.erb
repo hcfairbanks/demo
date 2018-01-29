@@ -1,0 +1,15 @@
+<h1>Editing User</h1>
+<% unless @user.avatar.blank? %>
+  <%= image_tag(File.join(root_url, @user.id.to_s, "user", "avatar", @user.id.to_s,"avatar","serve_image")) %>
+<% else %>
+  No Image <!-- Default  images needed-->
+<% end %>
+<br/>
+<%= render 'form' %>
+<%= link_to 'Show', @user %>
+<% if can? :index, :user %>
+| <%= link_to 'Back', users_path %>
+<% end %>
+<br/>
+<br/>
+<%= link_to 'Delete Account', @user, method: :delete, data: { confirm: 'Are you sure?' } %>

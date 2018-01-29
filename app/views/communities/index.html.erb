@@ -1,0 +1,99 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Communities</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Image</th>
+      <th>Name</th>
+      <th>User</th>
+      <th>Status</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @communities.each do |community| %>
+      <tr>
+        <td>
+          <% unless community.avatar_url.blank? %>
+          <!--
+              # user id is sent twice becasue it has the pic name in the same db as the user.
+              # Other models have a many to many relationship with their images.
+          -->
+            <%= image_tag(File.join(root_url, community.id.to_s, "community", "thumb", community.id.to_s,"avatar","serve_image")) %>
+          <% else %>
+            No Image <!-- Default  images needed-->
+          <% end %>
+        </td>
+        <td><%= community.name %></td>
+        <td><%= community.user_id %></td>
+        <td><%= community.status_id %></td>
+        <td><%= link_to 'Show', community %></td>
+        <% if can? :edit, community %>
+          <td><%= link_to 'Edit', edit_community_path(community) %></td>
+          <td><%= link_to 'Destroy', community, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% else %>
+          <td></td>
+          <td></td>
+        <% end %>
+        <td>
+        <% if current_user.communities.collect(&:id).include? community.id %>
+          <%= form_tag('/remove_user') do %>
+            <%= hidden_field_tag 'user_id', current_user.id %>
+            <%= hidden_field_tag 'id', community.id %>
+            <%= submit_tag "Leave" %>
+          <% end %>
+        <% else %>
+          <%= form_tag('/add_user') do %>
+            <%= hidden_field_tag 'user_id', current_user.id %>
+            <%= hidden_field_tag 'id', community.id %>
+            <%= submit_tag "Join" %>
+          <% end %>
+        <% end %>
+      </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br>
+<%= link_to 'New Community', new_community_path %>
+<br/>
+<br/>
+<div id="communitiesbody">
+
+<% @communities.each do |community| %>
+<div class="community_card">
+      <% unless community.avatar_url.blank? %>
+        <%= image_tag(File.join(root_url, community.id.to_s, "community", "avatar", community.id.to_s,"avatar","serve_image")) %>
+      <% else %>
+        No Image <!-- Default  images needed-->
+      <% end %>
+    <br/>
+    <%= community.name %>    <br/>
+
+    <%= community.user_id %>    <br/>
+    <%= community.status_id %>    <br/>
+    <%= link_to 'Show', community %>    <br/>
+    <% if can? :edit, community %>
+    <%= link_to 'Edit', edit_community_path(community) %>    <br/>
+    <%= link_to 'Destroy', community, method: :delete, data: { confirm: 'Are you sure?' } %>    <br/>
+    <% end %>
+    <% if current_user.communities.collect(&:id).include? community.id %>
+      <%= form_tag('/remove_user') do %>
+        <%= hidden_field_tag 'user_id', current_user.id %>
+        <%= hidden_field_tag 'id', community.id %>
+        <%= submit_tag "Leave" %>    <br/>
+      <% end %>
+    <% else %>
+      <%= form_tag('/add_user') do %>
+        <%= hidden_field_tag 'user_id', current_user.id %>
+        <%= hidden_field_tag 'id', community.id %>
+        <%= submit_tag "Join" %>    <br/>
+      <% end %>
+    <% end %>
+<br/>
+</div>
+<% end %>
+</div>

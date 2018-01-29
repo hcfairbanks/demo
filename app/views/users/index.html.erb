@@ -1,0 +1,72 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Users</h1>
+
+<%= search_form_for @q do |f| %>
+  <%= f.label :email %>
+  <%= f.search_field :email %>
+  <%= f.label :id %>
+  <%= f.search_field :id %>
+  <%= f.submit %>
+<% end %>
+<br/>
+<table>
+  <thead>
+    <tr>
+      <th>Image</th>
+      <th>ID</th>
+      <th>Email</th>
+      <th>First name</th>
+      <th>Last name</th>
+      <th>Dob</th>
+      <th>City</th>
+      <th>Province</th>
+      <th colspan="3"></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td valign='top'>
+          <% unless user.avatar_url.blank? %>
+          <!--
+              # user id is sent twice becasue it has the pic name in the same db as the user.
+              # Other models have a many to many relationship with their images.
+          -->
+            <%= image_tag(File.join(root_url, user.id.to_s, "user", "thumb", user.id.to_s,"avatar","serve_image")) %>
+          <% else %>
+            No Image <!-- Default  images needed-->
+          <% end %>
+        </td>
+        <td><%= user.id %></td>
+        <td><%= user.email %></td>
+        <td><%= user.first_name %></td>
+        <td><%= user.last_name %></td>
+        <td><%= user.dob %></td>
+        <td><%= user.city %></td>
+        <td><%= user.province %></td>
+        <td><%= link_to 'Show', user %></td>
+        <td><%= link_to 'Edit', edit_user_path(user) %></td>
+        <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td>
+          <%= form_for(Friendship.new) do |f| %>
+            <%= f.hidden_field :id, value: user.id %>
+            <%= f.submit %>
+          <% end %>
+
+
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<br/>
+
+<br/>
+<% if can? :new, :user %>
+  <%= link_to 'New User', new_user_path %>
+<% end %>
+<br/>
+<%= will_paginate @user %>

@@ -1,0 +1,19 @@
+<h1>Conversations#new</h1>
+
+
+<div style="padding-left: 20px;">
+  <%= form_for @conversation do | f |  %>
+    <%= f.collection_select(:user_ids, current_user.friends, :id, :first_name,{include_hidden: false}, {style:"width: 50%; display:block;", class: 'en', multiple: true}) %>
+      <br/>      <br/>      <br/>
+    <%= f.fields_for :messages do | message_form | %>
+      <%= message_form.text_area :content, style:"width: 49%; display:block;", rows:"10"%>
+      <%= message_form.hidden_field :user_id, value: current_user.id%>
+    <% end%>
+    <%= f.submit "Submit", style:"display:block;", value:"Create Discussion"%>
+  <% end %>
+</div>
+
+<br/>
+https://select2.github.io/options.html#ajax
+<br/>
+<br/>

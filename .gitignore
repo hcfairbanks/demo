@@ -1,0 +1,20 @@
+# Ignore bundler config.
+/.bundle
+# Ignore all logfiles and tempfiles.
+/log
+/tmp
+/.env
+/.byebug_history
+db/test.sqlite3
+images
+config/config.yml
+config/#database.yml
+
+public/system/images
+public/system/icons
+public/uploads
+
+
+
+# Ignore application configuration
+/config/application.yml

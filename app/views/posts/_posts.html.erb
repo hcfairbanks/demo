@@ -1,0 +1,92 @@
+<hr/>
+<h1>Listing Posts</h1>
+
+
+
+
+<a onclick="hide_me('search_options')" href="javascript:void(0);">Search Options</a>
+
+
+
+
+<div id="search_options" style="display:none;">
+<%= form_tag('/posts', :method => "get") do %>
+  <table>
+    <tr>
+      <td ><%= label_tag 'Title' %></td>
+      <td style="padding-right:5px;"><%= text_field_tag 'title', params[:title], style:"width:100%;" %></td>
+      <td><%= label_tag 'Content' %></td>
+      <td style="padding-right:5px;"><%= text_field_tag 'content', params[:content], style:"width:100%;" %></td>
+    </tr>
+    <tr>
+      <td><%= label_tag 'Minimum Price' %></td>
+      <td style="padding-right:5px;"><%= text_field_tag 'min_price', params[:min_price], style:"width:100%;" %></td>
+      <td><%= label_tag 'Max Price' %></td>
+      <td style="padding-right:5px;"><%= text_field_tag 'max_price', params[:max_price], style:"width:100%;" %></td>
+    </tr>
+    <tr>
+      <td><%= label_tag 'start_date' %></td>
+      <td style="padding-right:5px;"><%= date_field_tag 'start_date', params[:start_date], style:"width:100%;text-align:center;" %></td>
+      <td><%= label_tag 'end_date' %></td>
+      <td><%= date_field_tag 'end_date', params[:end_date], style:"width:100%;text-align:center;" %></td>
+    </tr>
+    <tr>
+      <td><%= label_tag 'Sort results by' %></td>
+      <td>      <!-- Iam being lazy here -->
+              <%= select_tag "order_by",
+                options_for_select( [
+                  ["Latest","latest"],
+                  ["Oldest","oldest"],
+                  ["Title","title"],
+                  ["Content","content"],
+                  ["Highest Price","highest_price"],
+                  ["Lowest Price","lowest_price"]
+              ],params[:order_by]),style:"width:100%;" %>
+      </td>
+      <td></td>
+      <td><%= submit_tag 'Search' %></td>
+    </tr>
+  </table>
+<% end %>
+</div>
+<br/>
+
+<table>
+  <thead>
+    <tr>
+      <th>Image</th>
+      <th>Title</th>
+      <th>Price</th>
+      <th>Content</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% posts.each do | post | %>
+      <tr>
+        <td valign='top'>
+          <%#= link_to image_tag(File.join(root_url,user.image.id.to_s, "thumb","serve_image")), user_path(user) %>
+          <!-- TODO Replace with default image -->
+          <% unless post.photos.blank? %>
+            <%= image_tag(File.join(root_url, post.id.to_s, "photo", "thumb", post.photos[0].id.to_s,"pic","serve_image")) %>
+          <% else %>
+            No image
+          <% end %>
+        </td>
+
+        <td valign='top'><%= post.title %></td>
+        <td valign='top'><%= number_to_currency(post.price) %></td>
+        <td valign='top'><%= post.content %></td>
+        <td valign='top'><%= link_to 'Show', post %></td>
+        <% if can? :update, post %>
+          <td valign='top'><%= link_to 'Edit', edit_post_path(post) %></td>
+          <td valign='top'><%= link_to 'Destroy', post, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+<%= will_paginate posts %>

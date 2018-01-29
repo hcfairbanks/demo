@@ -1,0 +1,54 @@
+<p id="notice"><%= notice %></p>
+
+<% unless @user.avatar.blank? %>
+  <%= image_tag(File.join(root_url, @user.id.to_s, "user", "avatar", @user.id.to_s,"avatar","serve_image")) %>
+<% else %>
+No Image <!-- Default  images needed-->
+<% end %>
+
+<p>
+  <strong>First Name:</strong>
+  <%= @user.first_name %>
+</p>
+
+<p>
+  <strong>Last Name:</strong>
+  <%= @user.last_name %>
+</p>
+
+<p>
+  <strong>DOB:</strong>
+  <%= @user.dob %>
+</p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @user.email %>
+</p>
+
+<p>
+  <strong>City:</strong>
+  <%= @user.city %>
+</p>
+
+<p>
+  <strong>Province:</strong>
+  <%= @user.province %>
+</p>
+
+<p>
+  <strong>Roles:</strong>
+  <% @user.roles.each do | role | %>
+    <%= role.name %>
+  <% end %>
+</p>
+<p>
+  <strong>ID:</strong>
+  <%= @user.id %>
+</p>
+
+<%= link_to 'Edit', edit_user_path(@user.id) %>
+
+<% if can? :index, :user %>
+| <%= link_to 'Back', users_path %>
+<% end %>

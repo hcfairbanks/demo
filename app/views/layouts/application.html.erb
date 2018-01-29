@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DemoProject</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<div id="wrapper" style="width:100%; height:100vh; ">
+  <div id="header" style="
+  background-color:black;
+  color:white;
+  padding:0;
+  margin:0;
+  top:0;
+  height:10w%;
+  padding:30px;
+  ">
+
+
+  <div id="user_nav">
+    <% if current_user %>
+      <%= link_to "Edit Profile", edit_user_path(current_user.id) %> |
+      <%= link_to('Logout', destroy_user_session_path, method: :delete) %>
+  </div>
+  <ul id="main-menu" class="sm sm-simple">
+    <li><%= link_to "Posts", posts_path %></li>
+    <% # if current_user.is_admin? %>
+    <li><%= link_to "Users", users_path %></li>
+    <% # end %>
+    <li><%= link_to "Communities", communities_path %></li>
+    <li><%= link_to "Conversations", conversations_path %></a>
+      <ul>
+        <li><%= link_to "New Conversation", new_conversation_path %></li>
+        <li><a href="https://www.google.com">Google</a></li>
+        <li><a href="https://www.paypal.com">Paypal</a></li>
+      </ul>
+    </li>
+    <li><a href="https://www.bbc.com/news/world">BBC World News</a></li>
+  </ul>
+    <% end %>
+  </div>
+
+  <div id="left" style="background-color:black;width:10%;height:90%;float:left;">
+    Left
+  </div>
+  <div id="right" style="color:black;background-color:white;width:90%;height:90%;float:left;overflow-y: scroll; overflow-x:hidden;">
+    <%= yield %>
+  </div>
+</div>
+
+</body>
+</html>
